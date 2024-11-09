@@ -1,6 +1,4 @@
 import fs from "fs";
-import xlsx from "xlsx";
-import { Request, Response } from "express";
 import {
   getAirlineName,
   logFileAction,
@@ -9,6 +7,7 @@ import {
   transformData,
   writeExcelFile,
 } from "../helpers";
+import { Request, Response } from "express";
 
 const convertController = async (req: Request, res: Response) => {
   try {
