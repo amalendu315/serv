@@ -20,11 +20,19 @@ function transformData(
 ): ExcelRecord[] {
   switch (airlineCode.toLowerCase()) {
     case "i.xlsx":
-      return jsonData.map((record: ExcelRecord) => {
-        delete Object.assign(record, { ["Pax Type"]: record["SL"] })["SL"];
+      return jsonData.map((record) => {
+        delete Object.assign(record, {
+          ["Pax Type"]: record["SL"],
+        })["SL"];
+
         record["Pax Type"] = "Adult";
-        delete Object.assign(record, { ["TITLE"]: record["Title"] })["Title"];
-        delete Object.assign(record, { ["Title"]: record["TITLE"] })["TITLE"];
+
+        delete Object.assign(record, {
+          ["TITLE"]: record["Title"],
+        })["Title"];
+        delete Object.assign(record, {
+          ["Title"]: record["TITLE"],
+        })["TITLE"];
 
         const dot = record.Title.indexOf(".");
         if (dot > 0) {
@@ -54,6 +62,7 @@ function transformData(
         delete Object.assign(record, {
           ["First Name"]: record["FIRST NAME"],
         })["FIRST NAME"];
+
         delete Object.assign(record, {
           ["LAST NAME"]: record["Last Name"],
         })["Last Name"];
@@ -62,6 +71,7 @@ function transformData(
         })["LAST NAME"];
 
         record["Date of Birth (DD-MMM-YYYY)"] = "28-OCT-1989";
+
         record["Contact"] = "9932861111";
         record["Email"] = "info.airiq@gmail.com";
 
@@ -76,17 +86,26 @@ function transformData(
         return record;
       });
     case "g.xlsx":
-      return jsonData.map((record: ExcelRecord) => {
-        delete Object.assign(record, { ["TYPE"]: record["SL"] })["SL"];
+      return jsonData.map((record) => {
+        delete Object.assign(record, {
+          ["TYPE"]: record["SL"],
+        })["SL"];
+
         record.TYPE = "Adult";
-        delete Object.assign(record, { ["TITLE"]: record["Title"] })["Title"];
+
+        delete Object.assign(record, {
+          ["TITLE"]: record["Title"],
+        })["Title"];
+
         delete Object.assign(record, {
           ["FIRST NAME"]: record["First Name"],
         })["First Name"];
         delete Object.assign(record, {
           ["LAST NAME"]: record["Last Name"],
         })["Last Name"];
+
         record["DOB"] = "28/10/1989";
+
         const dot = record.TITLE.indexOf(".");
         if (dot > 0) {
           record.TITLE = record.TITLE.replace(".", "");
@@ -108,7 +127,9 @@ function transformData(
           record.TITLE = "Mr";
           record.GENDER = "Male";
         }
+
         record["MOBILE NUMBER"] = "9932861111";
+
         delete record["Billing A/C"];
         delete record["Login ID"];
         delete record["Price"];
@@ -119,114 +140,162 @@ function transformData(
 
         return record;
       });
+    case 's.xlsx':
+      return jsonData.map((record) => {
+
+
+                delete Object.assign(record, {
+                    ["TITLE"]: record["Title"]
+                })["Title"]
+
+                delete Object.assign(record, {
+                    ["FIRST NAME"]: record["First Name"]
+                })["First Name"]
+                delete Object.assign(record, {
+                    ["LAST NAME"]: record["Last Name"]
+                })["Last Name"]
+
+                record.TYPE = "Adult"
+
+
+                const dot = record.TITLE.indexOf(".");
+                if (dot > 0) {
+                    record.TITLE = record.TITLE.replace('.', '')
+                }
+        
+
+
+                delete record["Billing A/C"]
+                delete record["Login ID"]
+                delete record["Price"]
+                delete record["Entry Date"]
+                delete record["AQ ID"]
+                delete record["Display Pnr "]
+                delete record["Supplier"];
+
+                return record;
+              });
     case 'a.xlsx':
-        return jsonData.map((record:ExcelRecord)=>{
-            delete Object.assign(record, { ["TYPE"]: record["SL"] })["SL"];
+        return jsonData.map((record) => {
+          delete Object.assign(record, {
+            ["TYPE"]: record["SL"],
+          })["SL"];
 
-            record.TYPE = "Adult";
+          record.TYPE = "Adult";
 
-            delete Object.assign(record, { ["TITLE"]: record["Title"] })[
-              "Title"
-            ];
+          delete Object.assign(record, {
+            ["TITLE"]: record["Title"],
+          })["Title"];
 
-            delete Object.assign(record, {
-              ["FIRST NAME"]: record["First Name"],
-            })["First Name"];
+          delete Object.assign(record, {
+            ["FIRST NAME"]: record["First Name"],
+          })["First Name"];
+          delete Object.assign(record, {
+            ["LAST NAME"]: record["Last Name"],
+          })["Last Name"];
 
-            delete Object.assign(record, {
-              ["LAST NAME"]: record["Last Name"],
-            })["Last Name"];
+          record["DOB (DD/MM/YYYY)"] = "28/10/1989";
 
-            record["DOB (DD/MM/YYYY)"] = "28/10/1989";
+          const dot = record.TITLE.indexOf(".");
+          if (dot > 0) {
+            record.TITLE = record.TITLE.replace(".", "");
+          }
+          if (record.TITLE === "Mr") {
+            record.GENDER = "Male";
+          }
+          if (record.TITLE === "Mrs") {
+            record.GENDER = "Female";
+          }
+          if (record.TITLE === "Ms") {
+            record.GENDER = "Female";
+          }
+          if (record.TITLE === "Miss") {
+            record.TITLE = "Ms";
+            record.GENDER = "Female";
+          }
+          if (record.TITLE === "Mstr") {
+            record.TITLE = "Mr";
+            record.GENDER = "Male";
+          }
 
-            const dot = record.TITLE.indexOf(".");
-            if (dot > 0) {
-              record.TITLE = record.TITLE.replace(".", "");
-            }
+          record["MOBILE NUMBER"] = "9932861111";
 
-            if (record.TITLE === "Mr") {
-              record.GENDER = "Male";
-            } else if (
-              record.TITLE === "Mrs" ||
-              record.TITLE === "Ms" ||
-              record.TITLE === "Miss"
-            ) {
-              record.GENDER = "Female";
-              if (record.TITLE === "Miss") {
-                record.TITLE = "Ms";
-              }
-            } else if (record.TITLE === "Mstr") {
-              record.TITLE = "Mr";
-              record.GENDER = "Male";
-            }
+          delete record["Billing A/C"];
+          delete record["Login ID"];
+          delete record["Price"];
+          delete record["Entry Date"];
+          delete record["AQ ID"];
+          delete record["Display Pnr "];
+          delete record["Supplier"];
 
-            record["MOBILE NUMBER"] = "9932861111";
-
-            delete record["Billing A/C"];
-            delete record["Login ID"];
-            delete record["Price"];
-            delete record["Entry Date"];
-            delete record["AQ ID"];
-            delete record["Display Pnr "];
-            delete record["Supplier"];
-
-            return record;
+          return record;
         });
     case 'q.xlsx':
-        return jsonData.map((record:ExcelRecord)=>{
-            delete Object.assign(record, { ["S No"]: record["SL"] })["SL"];
+        return jsonData.map((record) => {
+          const {
+            Title,
+            "First Name": firstName,
+            "Last Name": lastName,
+            SL,
+            "Pax Type": paxType,
+            "DOB (dd-mmm-yyyy)": dob,
+          } = record;
 
-            delete Object.assign(record, {
-              ["TYPE"]: record["SL"],
-            })["SL"];
+          record.TYPE = "ADT";
 
-            record.TYPE = "Adult";
+          delete Object.assign(record, {
+            ["TITLE"]: Title,
+          })["Title"];
 
-            delete Object.assign(record, { ["TITLE"]: record["Title"] })[
-              "Title"
-            ];
-            delete Object.assign(record, {
-              ["FIRST NAME"]: record["First Name"],
-            })["First Name"];
-            delete Object.assign(record, {
-              ["LAST NAME"]: record["Last Name"],
-            })["Last Name"];
+          delete Object.assign(record, {
+            ["FIRST NAME"]: firstName,
+          })["First Name"];
 
-            record["DOB (DD/MM/YYYY)"] = "28/10/1989";
+          delete Object.assign(record, {
+            ["LAST NAME"]: lastName,
+          })["Last Name"];
 
-            const dot = record.TITLE.indexOf(".");
-            if (dot > 0) {
-              record.TITLE = record.TITLE.replace(".", "");
-            }
-            if (record.TITLE === "Mr") {
-              record.GENDER = "Male";
-            }
-            if (record.TITLE === "Mrs") {
-              record.GENDER = "Female";
-            }
-            if (record.TITLE === "Ms") {
-              record.GENDER = "Female";
-            }
+          record["DOB (DD/MM/YYYY)"] = dob;
+
+          const dot = Title.indexOf(".");
+          if (dot > 0) {
+            record.TITLE = Title.replace(".", "");
+          }
+
+          if (record.TITLE === "Mr") {
+            record.GENDER = "Male";
+          } else if (
+            record.TITLE === "Mrs" ||
+            record.TITLE === "Ms" ||
+            record.TITLE === "Miss"
+          ) {
+            record.GENDER = "Female";
             if (record.TITLE === "Miss") {
               record.TITLE = "Ms";
-              record.GENDER = "Female";
             }
-            if (record.TITLE === "Mstr") {
-              record.TITLE = "Mr";
-              record.GENDER = "Male";
-            }
+          } else if (record.TITLE === "Mstr") {
+            record.TITLE = "Mr";
+            record.GENDER = "Male";
+          }
 
-            record["MOBILE NUMBER"] = "9932861111";
+          record["MOBILE NUMBER"] = "9932861111";
 
-            delete record["Billing A/C"];
-            delete record["Login ID"];
-            delete record["Price"];
-            delete record["Entry Date"];
-            delete record["AQ ID"];
-            delete record["Display Pnr "];
-            delete record["Supplier"];
+          delete record["Billing A/C"];
+          delete record["Login ID"];
+          delete record["Price"];
+          delete record["Entry Date"];
+          delete record["AQ ID"];
+          delete record["Display Pnr "];
+          delete record["Supplier"];
 
-            return record;
+          return {
+            "S No": record.SL,
+            Title: record.TITLE,
+            "First Name": record["FIRST NAME"],
+            "Last Name": record["LAST NAME"],
+            "Pax Type": "ADT",
+            "DOB (dd-mmm-yyyy)": "3-Jan-1984",
+          };
         });
     case 't.xlsx':
         return jsonData.map((record:ExcelRecord)=>{
@@ -367,6 +436,7 @@ function logFileAction(fileName: string, airlineName: string): void {
   const fulldate = `${date}/${month}/${year}`;
   const appenddata = ` ${fulldate} ${fileName} ${airlineName} converted successfully \n`;
   fs.appendFileSync("data.log", appenddata);
+  console.log(appenddata);
 }
 
 function sendExcelFile(res: any, buffer: Buffer, fileName: string): void {
@@ -384,6 +454,8 @@ function getAirlineName(airlineCode: string): string {
       return "Indigo";
     case "g.xlsx":
       return "GoAir";
+    case "s.xlsx":
+      return 'Spicejet';
     case "a.xlsx":
       return "AirAsia";
     case "q.xlsx":

@@ -32,6 +32,7 @@ const convertController = async (req: Request, res: Response) => {
         buffer,
         `${finalName[0]} ${airlineName} NAMELIST.xlsx`
       );
+      console.log(`File ${"./uploads/"} has been successfully removed.`);
     });
   } catch (error) {
     console.error(error);
