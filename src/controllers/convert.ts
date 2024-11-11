@@ -24,15 +24,17 @@ const convertController = async (req: Request, res: Response) => {
     const jsonSheet = readExcelData(`./uploads/${fullName}`, "Sheet1");
     const transformedData = transformData(jsonSheet, airlineCode);
     const buffer = writeExcelFile(transformedData);
-    fs.unlink("./uploads/" + fullName, (err) => {
-      if (err) throw err;
-      logFileAction(finalName[0], airlineName);
-      sendExcelFile(
-        res,
-        buffer,
-        `${finalName[0]} ${airlineName} NAMELIST.xlsx`
-      );
-    });
+    // fs.unlink("./uploads/" + fullName, (err) => {
+    //   if (err) throw err;
+    //   logFileAction(finalName[0], airlineName);
+    //   sendExcelFile(
+    //     res,
+    //     buffer,
+    //     `${finalName[0]} ${airlineName} NAMELIST.xlsx`
+    //   );
+    // });
+    logFileAction(finalName[0], airlineName);
+    sendExcelFile(res, buffer, `${finalName[0]} ${airlineName} NAMELIST.xlsx`);
   } catch (error) {
     console.error(error);
     return res.json({ error: "Error Converting File", status: 500 });
