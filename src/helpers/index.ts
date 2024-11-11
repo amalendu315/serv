@@ -387,7 +387,7 @@ function getAirlineName(airlineCode: string): string {
     case "a.xlsx":
       return "AirAsia";
     case "q.xlsx":
-      return "Qatar"; 
+      return "Akasa"; 
     case "t.xlsx":
       return "ThaiAirAsia";
     case "d.xlsx":
