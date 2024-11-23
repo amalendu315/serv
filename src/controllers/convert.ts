@@ -1,4 +1,3 @@
-import fs from "fs";
 import {
   getAirlineName,
   logFileAction,
@@ -16,23 +15,13 @@ const convertController = async (req: Request, res: Response) => {
       throw new Error("No file uploaded");
     }
     const fullNamePnr = fullName?.split("--");
-    //@ts-ignore
     const fullPnr = fullNamePnr[1];
     const finalName = fullPnr.split(" ");
-    const airlineCode = finalName[1].toLowerCase(); // Normalize
+    const airlineCode = finalName[1].toLowerCase();
     const airlineName = getAirlineName(airlineCode);
     const jsonSheet = readExcelData(`./uploads/${fullName}`, "Sheet1");
     const transformedData = transformData(jsonSheet, airlineCode);
     const buffer = writeExcelFile(transformedData);
-    // fs.unlink("./uploads/" + fullName, (err) => {
-    //   if (err) throw err;
-    //   logFileAction(finalName[0], airlineName);
-    //   sendExcelFile(
-    //     res,
-    //     buffer,
-    //     `${finalName[0]} ${airlineName} NAMELIST.xlsx`
-    //   );
-    // });
     logFileAction(finalName[0], airlineName);
     sendExcelFile(res, buffer, `${finalName[0]} ${airlineName} NAMELIST.xlsx`);
   } catch (error) {

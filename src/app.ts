@@ -1,12 +1,18 @@
-import cors from 'cors';
-import express from 'express';
-import bodyParser from 'body-parser';
+import cors from "cors";
+import express from "express";
+import morgan from 'morgan'
+import bodyParser from "body-parser";
 
 //Local Imports
-import { PORT } from './constants';
-import convertRoute from './routes/convert';
+import { PORT } from "./constants";
+import {
+  akasaRoute,
+  convertRoute,
+  retreiveRoute,
+} from "./routes";
 
 const app = express();
+
 
 //Middleware usage
 app.use(
@@ -14,13 +20,16 @@ app.use(
     exposedHeaders: ["Content-Disposition"],
   })
 );
+app.use(morgan("tiny"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //Routes
-app.use('/convert',convertRoute);
+app.use("/convert", convertRoute);
+app.use("/akasa", akasaRoute);
+app.use("/retrieve", retreiveRoute);
 
 //app listening
-app.listen(PORT, ()=>{
-    return console.log(`PNR BUDDY is listening at http://localhost:${PORT}`);
-})
+app.listen(PORT, () => {
+  return console.log(`PNR BUDDY is listening at http://localhost:${PORT}`);
+});

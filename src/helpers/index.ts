@@ -1,9 +1,12 @@
-import * as xlsx from "xlsx";
 import * as fs from "fs";
+import * as xlsx from "xlsx";
+
 
 interface ExcelRecord {
   [key: string]: any;
 }
+
+//PNR BUDDY
 
 function readExcelData(filePath: string, sheetName: string): ExcelRecord[] {
   const wb = xlsx.readFile(filePath, { cellDates: true });
@@ -418,8 +421,6 @@ function transformData(
         record["Civility*"] = record["Title"]; // Copy the value
         delete record["Title"]; // Delete the original property
 
-        
-
         const dot = record["Civility*"]?.indexOf("."); // Access with bracket notation
         if (dot > 0) {
           record["Civility*"] = record["Civility*"]?.replace(".", "");
@@ -444,7 +445,7 @@ function transformData(
         delete Object.assign(record, {
           ["First Name*"]: record["First Name"],
         })["First Name"];
-        record["Middle Name"] = " "
+        record["Middle Name"] = " ";
         delete Object.assign(record, {
           ["Last Name*"]: record["Last Name"],
         })["Last Name"];
@@ -499,7 +500,7 @@ function sendExcelFile(res: any, buffer: Buffer, fileName: string): void {
   );
   res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
   res.send(buffer);
-};
+}
 
 function getAirlineName(airlineCode: string): string {
   switch (airlineCode) {
@@ -522,7 +523,7 @@ function getAirlineName(airlineCode: string): string {
     default:
       return "Unknown Airline";
   }
-};
+}
 
 export {
   readExcelData,
