@@ -7,8 +7,10 @@ import bodyParser from "body-parser";
 import { PORT } from "./constants";
 import {
   akasaRoute,
+  akasaStatusRoute,
   convertRoute,
   retreiveRoute,
+  spicejetStatusRoute,
 } from "./routes";
 
 const app = express();
@@ -28,6 +30,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/convert", convertRoute);
 app.use("/akasa", akasaRoute);
 app.use("/retrieve", retreiveRoute);
+app.use("/flightops/spicejet", spicejetStatusRoute);
+app.use("/flightops/akasa", akasaStatusRoute);
 
 //app listening
 app.listen(PORT, () => {
