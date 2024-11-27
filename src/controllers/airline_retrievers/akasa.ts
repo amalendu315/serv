@@ -67,7 +67,7 @@ export const getAkasaData = async (req: Request, res: Response) => {
      await Promise.all(
        pnrs.map(async (pnr) => {
          try {
-           const config = {
+           const config1 = {
              method: "get",
              url: `${akasaPnrRetrieveUrl}?recordLocator=${pnr}&emailAddress=Airlines@Airiq.In`,
              headers: {
@@ -79,8 +79,24 @@ export const getAkasaData = async (req: Request, res: Response) => {
              httpsAgent: new https.Agent({ rejectUnauthorized: false }),
            };
 
+           const config2 = {
+             method: "get",
+             url: `${akasaPnrRetrieveUrl}?recordLocator=${pnr}&emailAddress=airlinesairiq@gmail.com`,
+             headers: {
+               Authorization: header,
+               "Content-Type": "application/json",
+               "User-Agent":
+                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+             },
+             httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+           };
+
            let response: AxiosResponse<any>;
-           response = await axios(config);
+           try {
+            response = await axios(config1);
+           } catch (error) {
+            response = await axios(config2);
+           }
 
            const bookingData = response?.data.data;
 
