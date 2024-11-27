@@ -250,7 +250,6 @@ export const getAkasaStatus = async (req:Request, res:Response) => {
        // Send the results as an array
        res.status(200).send({ results, errors });
     } catch (error) {
-        console.error("Error fetching Akasa status:", error);
         res.status(500).send(error);
     }
 };
