@@ -46,7 +46,7 @@ const checkTimeFormat = (text: string): string => {
 export const getSpicejetStatus = async (req: Request, res: Response) => {
     try {
         const data = await makeApiCall(10);
-        const myToken = data?.data?.token;
+        const myToken = data?.data?.data.token;
         const fullName = req.file?.filename;
         if (!fullName) {
           throw new Error("No file uploaded");
@@ -76,7 +76,7 @@ export const getSpicejetStatus = async (req: Request, res: Response) => {
               if (!response || !response.data || !response.data.data) {
                 throw new Error("Invalid API response");
               }
-              const bookingData = response.data.bookingData;
+              const bookingData = response.data.data;
               const journeys = bookingData.journeys;
               const length = journeys?.length;
 

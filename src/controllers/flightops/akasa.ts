@@ -108,10 +108,6 @@ export const getAkasaStatus = async (req:Request, res:Response) => {
               try {
                 response = await axios(config2);
               } catch (error:any) {
-                console.error(
-                  "Error fetching PNR with both email addresses:",
-                  error
-                );
                 return `Error processing PNR ${PNR}: ${error?.message}`;
               }
             }
