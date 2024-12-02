@@ -18,9 +18,22 @@ const app = express();
 
 
 //Middleware usage
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://pnrbuddy.netlify.app",
+];
 app.use(
   cors({
-    exposedHeaders: ["Content-Disposition"],
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg =
+          "The CORS policy for this site does not " +
+          "allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
   })
 );
 app.use(morgan("tiny"));
