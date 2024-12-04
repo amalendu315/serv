@@ -2,7 +2,6 @@ import cors from "cors";
 import express from "express";
 import morgan from 'morgan'
 import bodyParser from "body-parser";
-import monitor from 'express-status-monitor';
 
 //Local Imports
 import { PORT } from "./constants";
@@ -38,7 +37,6 @@ app.use(
   })
 );
 app.use(morgan("tiny"));
-app.use(monitor());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
