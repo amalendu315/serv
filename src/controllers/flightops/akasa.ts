@@ -74,11 +74,10 @@ export const getAkasaStatus = async (req:Request, res:Response) => {
          const ws = wb.Sheets["Sheet1"];
          ws["!ref"] = "A1:K3000"; // Adjust the range if necessary
          const jsonSheet = xlsx.utils.sheet_to_json(ws);
-          const chunkSize = 40;
+          const chunkSize = 30;
           const allResults = [];
 
            for (let i = 0; i < jsonSheet.length; i += chunkSize) {
-            console.log('i', i)
              const chunk = jsonSheet.slice(i, i + chunkSize);
              const chunkResults = await Promise.all(
                chunk.map(async (record: any) => {
