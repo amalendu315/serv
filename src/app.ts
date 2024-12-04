@@ -20,7 +20,8 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:3000",
   "https://pnrbuddy.netlify.app",
-  "http://ec2-3-110-55-153.ap-south-1.compute.amazonaws.com"
+  "http://ec2-3-110-55-153.ap-south-1.compute.amazonaws.com",
+  "http://ec2-13-232-29-185.ap-south-1.compute.amazonaws.com"
 ];
 app.use(
   cors({
