@@ -342,7 +342,7 @@ function transformData(
           record["DOB (DD/MM/YYYY)"] = `${day}/${month}/${year}`;
         }
 
-        record["CITIZENSHIP"] = "INDIA";
+        record["CITIZENSHIP"] = "INDIAN-IN";
 
         delete record["SL"];
         delete record["Billing A/C"];
