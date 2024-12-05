@@ -6,6 +6,10 @@ import xlsx from "xlsx";
 import bluebird from "bluebird";
 import axios, { AxiosResponse } from "axios";
 
+
+// Set the default timezone for Moment.js
+moment.tz.setDefault("Asia/Kolkata");
+
 const AkasaTokenConfig = {
   method: "post",
   url: akasaTokenUrl,
@@ -154,7 +158,7 @@ export const getAkasaStatus = async (req:Request, res:Response) => {
 
                      const OldPur = JSON.stringify(record.Pur);
                      const DepinputTime = record.Dep;
-                     const date = moment.tz(DepinputTime,"Asia/Kolkata");
+                     const date = moment.utc(DepinputTime).tz("Asia/Kolkata");
                      const minute = date.minutes();
                      const lastDigit = minute % 10;
                      let roundedMinutes = 0;
