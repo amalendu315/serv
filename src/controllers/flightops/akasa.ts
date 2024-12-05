@@ -154,7 +154,7 @@ export const getAkasaStatus = async (req:Request, res:Response) => {
 
                      const OldPur = JSON.stringify(record.Pur);
                      const DepinputTime = record.Dep;
-                     const date = moment.utc(DepinputTime).tz("Asia/Kolkata");
+                     const date = moment.tz(DepinputTime,"Asia/Kolkata");
                      const minute = date.minutes();
                      const lastDigit = minute % 10;
                      let roundedMinutes = 0;
