@@ -334,6 +334,12 @@ function transformData(
           console.warn(
             "Warning: 'DOB (DD/MM/YYYY)' property not found in record."
           );
+        } else {
+          const dobDate = new Date(record["DOB (DD/MM/YYYY)"]); // Create a Date object
+          const day = dobDate.getDate().toString().padStart(2, "0");
+          const month = (dobDate.getMonth() + 1).toString().padStart(2, "0"); // Month is 0-indexed
+          const year = dobDate.getFullYear();
+          record["DOB (DD/MM/YYYY)"] = `${day}/${month}/${year}`;
         }
 
         record["CITIZENSHIP"] = "INDIA";
