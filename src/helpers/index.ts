@@ -516,15 +516,12 @@ function logFileAction(fileName: string, airlineName: string): void {
 }
 
 function sendExcelFile(res: any, buffer: Buffer, fileName: string): void {
-  res.setHeader("Content-Type", "application/json");
+  res.setHeader(
+    "Content-Type",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  );
   res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
-  const arrayBuffer = Buffer.concat([
-    Buffer.from(fileName, "utf-8"), // Encode filename as UTF-8 bytes
-    Buffer.from([0]), // Add a null byte as a separator
-    buffer, // Your original file buffer
-  ]);
-
-  res.send(arrayBuffer); 
+  res.send(buffer);
 }
 
 function getAirlineName(airlineCode: string): string {
