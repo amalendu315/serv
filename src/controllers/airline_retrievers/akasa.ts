@@ -60,7 +60,7 @@ export const getAkasaData = async (req: Request, res: Response) => {
      const pnrs: string[] = req.body;
      const data = await makeApiCall(10); // Fetch token once
      const myToken = data.data.token;
-     const header = `Bearer ${myToken}`;
+      const authorization = myToken;;
 
      const results: string[] = [];
      const errors: string[] = [];
@@ -71,7 +71,7 @@ export const getAkasaData = async (req: Request, res: Response) => {
              method: "get",
              url: `${akasaPnrRetrieveUrl}?recordLocator=${pnr}&emailAddress=Airlines@Airiq.In`,
              headers: {
-               Authorization: header,
+               Authorization: authorization,
                "Content-Type": "application/json",
                "User-Agent":
                  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
@@ -83,7 +83,7 @@ export const getAkasaData = async (req: Request, res: Response) => {
              method: "get",
              url: `${akasaPnrRetrieveUrl}?recordLocator=${pnr}&emailAddress=airlinesairiq@gmail.com`,
              headers: {
-               Authorization: header,
+               Authorization: authorization,
                "Content-Type": "application/json",
                "User-Agent":
                  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
