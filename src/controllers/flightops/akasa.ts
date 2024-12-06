@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { akasaPnrRetrieveUrl, akasaTokenUrl } from "../../constants";
+import { akasaPnrRetrieveUrl, akasaTokenUrl, environment } from "../../constants";
 import moment from "moment-timezone";
 import https from "https";
 import xlsx from "xlsx";
@@ -67,7 +67,7 @@ export const getAkasaStatus = async (req:Request, res:Response) => {
     try {
          const data = await makeApiCall(10);
          const myToken = data?.data?.token;
-         const header = `Bearer ${myToken}`;
+         const authorization = myToken;
 
          const fullName = req.file?.filename;
          if (!fullName) {
@@ -92,7 +92,7 @@ export const getAkasaStatus = async (req:Request, res:Response) => {
                    method: "get",
                    url: `${akasaPnrRetrieveUrl}?recordLocator=${PNR}&emailAddress=Airlines@Airiq.In`,
                    headers: {
-                     Authorization: header,
+                     Authorization: authorization,
                      "Content-Type": "application/json",
                      "User-Agent":
                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
@@ -166,7 +166,13 @@ export const getAkasaStatus = async (req:Request, res:Response) => {
                        ? (roundedMinutes = minute)
                        : (roundedMinutes = minute + 1);
                      date.minutes(roundedMinutes);
-                     const OldDep = date.format("HH:mm A");
+                     const OldDep =
+                       environment === "development"
+                         ? date.format("HH:mm A")
+                         : moment(date)
+                             .subtract(5, "hours")
+                             .subtract(30, "minutes")
+                             .format("HH:mm A");
                      const ArrinputTime = record.Arr;
                      const dateb = moment.utc(ArrinputTime).tz("Asia/Kolkata");
                      const minuteb = dateb.minutes();
@@ -176,7 +182,13 @@ export const getAkasaStatus = async (req:Request, res:Response) => {
                        ? (roundedMinutesb = minuteb)
                        : (roundedMinutesb = minuteb + 1);
                      dateb.minutes(roundedMinutesb);
-                     const OldArr = dateb.format("HH:mm A");
+                     const OldArr =
+                       environment === "development"
+                         ? dateb.format("HH:mm A")
+                         : moment(dateb)
+                             .subtract(5, "hours")
+                             .subtract(30, "minutes")
+                             .format("HH:mm A");
 
                      const OldDate = moment(record.TravelDate).format(
                        "YYYY-MM-DD"
@@ -196,38 +208,76 @@ export const getAkasaStatus = async (req:Request, res:Response) => {
                      };
 
                      const MyRemarks = CheckStatus();
-                     const result =
-                       record.PNR +
-                       "|" +
-                       Origin +
-                       "|" +
-                       Destination +
-                       "|" +
-                       record.Flight +
-                       "|" +
-                       flightNumber +
-                       "|" +
-                       OldPur +
-                       "|" +
-                       PAX +
-                       "|" +
-                       OldDate +
-                       "|" +
-                       depDate +
-                       "|" +
-                       OldDep +
-                       "|" +
-                       depTime +
-                       "|" +
-                       OldArr +
-                       "|" +
-                       arrTime +
-                       "|" +
-                       MyRemarks;
-                     return {
-                       pnr: record.PNR,
-                       data: result,
-                     };
+                     if(environment === "production"){
+                      const result =
+                        record.PNR +
+                        "|" +
+                        Origin +
+                        "|" +
+                        Destination +
+                        "|" +
+                        record.Flight +
+                        "|" +
+                        flightNumber +
+                        "|" +
+                        OldPur +
+                        "|" +
+                        PAX +
+                        "|" +
+                        OldDate +
+                        "|" +
+                        depDate +
+                        "|" +
+                        OldDep +
+                        "|" +
+                        depTime +
+                        "|" +
+                        OldArr +
+                        "|" +
+                        arrTime +
+                        "|" +
+                        MyRemarks;
+
+                        return {
+                          pnr: record.PNR,
+                          data: result,
+                        };
+
+                     } else {
+                      const result =
+                        record.PNR +
+                        "|" +
+                        Origin +
+                        "|" +
+                        Destination +
+                        "|" +
+                        record.Flight +
+                        "|" +
+                        flightNumber +
+                        "|" +
+                        OldPur +
+                        "|" +
+                        PAX +
+                        "|" +
+                        OldDate +
+                        "|" +
+                        depDate +
+                        "|" +
+                        OldDep +
+                        "|" +
+                        depTime +
+                        "|" +
+                        OldArr +
+                        "|" +
+                        arrTime +
+                        "|" +
+                        MyRemarks;
+                         return {
+                           pnr: record.PNR,
+                           data: result,
+                         };
+                     }
+                    
                    } else {
                      const PNR = bookingData.recordLocator;
                      return {
