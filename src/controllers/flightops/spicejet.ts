@@ -45,16 +45,18 @@ const checkTimeFormat = (text: string): string => {
 
 export const getSpicejetStatus = async (req: Request, res: Response) => {
     try {
-        const data = await makeApiCall(10);
-        const myToken = data?.data?.data.token;
-        const fullName = req.file?.filename;
-        if (!fullName) {
-          throw new Error("No file uploaded");
-        }
-        const wb = xlsx.readFile("./uploads/" + fullName, { cellDates: true });
-        const ws = wb.Sheets["Sheet1"];
-        ws["!ref"] = "A1:K3000"; // Adjust the range if necessary
-        const jsonSheet = xlsx.utils.sheet_to_json(ws);
+       const data = await makeApiCall(10);
+       const myToken = data?.data?.data.token;
+       const fullName = req.file?.filename;
+
+       if (!fullName) {
+         return res.status(400).send({ error: "No file uploaded" });
+       }
+
+       const wb = xlsx.readFile("./uploads/" + fullName, { cellDates: true });
+       const ws = wb.Sheets["Sheet1"];
+       ws["!ref"] = "A1:K3000"; // Adjust the range if necessary
+       const jsonSheet = xlsx.utils.sheet_to_json(ws);
         const allResults = await Promise.all(
           jsonSheet.map(async (record: any) => {
             const PNR = record?.PNR;
@@ -69,12 +71,24 @@ export const getSpicejetStatus = async (req: Request, res: Response) => {
               },
               httpsAgent: new https.Agent({ rejectUnauthorized: false }),
             };
-            let response: AxiosResponse<any>;
-              response = await axios(config1);
+            // let response: AxiosResponse<any>;
+            //   response = await axios(config1);
+            //   if (!response || !response.data || !response.data.data || response === undefined || response.data.length < 0) {
+            //     throw new Error(`Invalid API response for PNR ${PNR}`);
+            //   }
             
             try {
-              if (!response || !response.data || !response.data.data) {
-                throw new Error("Invalid API response");
+
+              const response = await axios(config1);
+
+              if (
+                !response ||
+                !response.data ||
+                !response.data.data ||
+                response === undefined ||
+                response.data.length < 0
+              ) {
+                throw new Error(`Invalid API response for PNR ${PNR}`);
               }
               const bookingData = response.data.data;
               const journeys = bookingData.journeys;
@@ -194,17 +208,33 @@ export const getSpicejetStatus = async (req: Request, res: Response) => {
                 return result;
               }
             } catch (error: any) {
-              if (error?.response?.status === 404) {
-                return {
-                  pnr: record.PNR,
-                  error: `PNR NOT FOUND ${record.PNR}`,
-                };
-              } else {
-                return {
-                  pnr: record.PNR,
-                  error: `Error processing PNR ${record.PNR}: ${error?.message}`,
-                };
-              }
+             if (error?.response) {
+               let errorMessage = `Error fetching PNR ${PNR}`;
+               switch (error.response.status) {
+                 case 404:
+                   errorMessage = `PNR NOT FOUND ${record.PNR}`;
+                   break;
+                 case 403:
+                   errorMessage = "Access Denied";
+                   break;
+                 case 500:
+                   errorMessage =
+                     "Server Error: Unable to process the request.";
+                   break;
+                 // You can add more specific status checks if needed
+                 default:
+                   errorMessage = `Error: ${error.message}`;
+               }
+               return {
+                 pnr: record.PNR,
+                 error: errorMessage,
+               };
+             } else {
+               return {
+                 pnr: record.PNR,
+                 error: `Error processing PNR ${record.PNR}: ${error.message}`,
+               };
+             }
             }
           })
         );
@@ -213,16 +243,18 @@ export const getSpicejetStatus = async (req: Request, res: Response) => {
             if (result?.error) {
               acc.errors.push(result?.error);
             } else if (result.data) {
-              acc.results.push(result.data); // Accumulate results as an array
+              acc.results.push(result.data);
             }
             return acc;
           },
           { results: [] as string[], errors: [] as string[] }
         );
 
-        // Send the results as an array
         res.status(200).send({ results, errors });
-    } catch (error) {
-        res.status(500).send(error);
+    } catch (error:any) {
+        console.error("Processing Error: ", error?.message); // Log the error for debugging
+        res
+          .status(500)
+          .send({ error: "There was an error processing your request." });
     }
 };
