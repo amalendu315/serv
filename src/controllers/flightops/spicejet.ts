@@ -129,7 +129,7 @@ export const getSpicejetStatus = async (req: Request, res: Response) => {
                     ? date.format("HH:mm A")
                     : moment(date)
                         .subtract(5, "hours")
-                        .subtract(22, "minutes")
+                        .subtract(30, "minutes")
                         .format("HH:mm A");;
 
                 ////arrival b-----------------------
