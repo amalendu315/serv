@@ -219,11 +219,11 @@ export const getSpicejetStatus = async (req: Request, res: Response) => {
                    break;
                  case 500:
                    errorMessage =
-                     "Server Error: Unable to process the request.";
+                     `Server Error: Unable to process the request for ${PNR}.`;
                    break;
                  // You can add more specific status checks if needed
                  default:
-                   errorMessage = `Error: ${error.message}`;
+                   errorMessage = `Error: ${error.message} for ${PNR}`;
                }
                return {
                  pnr: record.PNR,
