@@ -205,7 +205,10 @@ export const getSpicejetStatus = async (req: Request, res: Response) => {
               } else {
                 const PNR = bookingData.recordLocator;
                 const result = `${PNR} is Cancelled`;
-                return result;
+                return {
+                  pnr: record.PNR,
+                  error: result,
+                };
               }
             } catch (error: any) {
              if (error?.response) {
