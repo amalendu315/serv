@@ -124,13 +124,7 @@ export const getSpicejetStatus = async (req: Request, res: Response) => {
 
                 date.minutes(roundedMinutes);
 
-                const OldDep =
-                  environment === "development"
-                    ? date.format("HH:mm A")
-                    : moment(date)
-                        .subtract(5, "hours")
-                        .subtract(30, "minutes")
-                        .format("HH:mm A");;
+                const OldDep = date.format("HH:mm A");;
 
                 ////arrival b-----------------------
 
@@ -145,13 +139,7 @@ export const getSpicejetStatus = async (req: Request, res: Response) => {
                   : (roundedMinutesb = minuteb + 1);
 
                 dateb.minutes(roundedMinutesb);
-                const OldArr =
-                  environment === "development"
-                    ? dateb.format("HH:mm A")
-                    : moment(dateb)
-                        .subtract(5, "hours")
-                        .subtract(30, "minutes")
-                        .format("HH:mm A");;
+                const OldArr = dateb.format("HH:mm A");
 
                 const OldDate = moment(record.TravelDate).format("YYYY-MM-DD"); //Date
 
