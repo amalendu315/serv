@@ -210,7 +210,7 @@ export const getSpicejetStatus = async (req: Request, res: Response) => {
                    break;
                  case 500:
                    errorMessage =
-                     `Server Error: Unable to process the request for ${PNR}.`;
+                     `Server Error: Unable to process the request for ${PNR}. Please check if the PNR is booked or not?`;
                    break;
                  // You can add more specific status checks if needed
                  default:
